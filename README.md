@@ -21,5 +21,17 @@ cd chart-splunk
 Install and create namespace if not exists:
 
 ```bash
-helm install --create-namespace splunk .
+helm install --create-namespace --namespace splunk splunk .
+```
+
+Waiting for setup done:
+
+```bash
+kubectl logs -f svc/captain
+```
+
+When finish, message will be like:
+
+```txt
+
 ```

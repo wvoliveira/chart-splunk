@@ -80,7 +80,7 @@ search:
 
   member:
     name: search
-    replicas: 3
+    replicas: 2
 
     labels:
       app: splunk

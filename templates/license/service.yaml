@@ -2,22 +2,18 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: license-master
+  name: {{ .Values.license.name }}
   namespace: {{ .Values.global.namespace }}
   labels:
-    app: splunk
-    role: splunk_license_master
-    tier: management
+    {{ toYaml .Values.license.labels | nindent 4 }}
 spec:
   type: NodePort
   selector:
-    app: splunk
-    role: splunk_license_master
-    tier: management
+    {{ toYaml .Values.license.labels | nindent 4 }}
   ports:
     - name: splunkweb
-      port: 8000
-      targetPort: 8000
+      port: {{ .Values.global.splunk.containerPorts.web }}
+      targetPort: {{ .Values.global.splunk.containerPorts.web }}
     - name: splunkd
-      port: 8089
-      targetPort: 8089
+      port: {{ .Values.global.splunk.containerPorts.mgmt }}
+      targetPort: {{ .Values.global.splunk.containerPorts.mgmt }}
