@@ -1,0 +1,25 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deployer 
+  labels:
+    app: splunk
+    role: splunk_deployer
+    tier: management 
+spec:
+  selector:
+    app: splunk
+    role: splunk_deployer
+    tier: management
+  ports:
+    - name: splunkweb
+      port: 8000
+      targetPort: 8000
+    - name: splunkd
+      port: 8089
+      targetPort: 8089
+    - name: kv
+      port: 8191
+      targetPort: 8191
+  clusterIP: None

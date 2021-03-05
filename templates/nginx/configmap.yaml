@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-data-www
+data:
+{{ (.Files.Glob "data/nginx/nginx-data-www/*").AsConfig | indent 2 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+{{ (.Files.Glob "data/nginx/nginx-static.conf").AsConfig | indent 2 }}
