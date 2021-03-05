@@ -1,3 +1,72 @@
+global:
+
+  splunk:
+    password: helloworld
+
+    containerPorts:
+      web: 8000
+      mgmt: 8089
+      kv: 8191
+      replica: 4001
+      s2s: 9997
+      hec: 8088
+
+    image:
+      repository: splunk/splunk
+      tag: 8.1.1
+      pullPolicy: IfNotPresent
+
+nginx:
+  name: nginx
+  replicas: 1
+  containerPort: 80
+
+  labels:
+    app: splunk
+    role: splunk_defaults
+    tier: management
+
+  image:
+    repository: nginx
+    tag: 1.19.7
+    pullPolicy: IfNotPresent
+
+deployer:
+  name: deployer
+  replicas: 1
+
+  labels:
+    app: splunk
+    role: splunk_deployer
+    tier: management
+
+  image:
+    repository: splunk/splunk
+    tag: 8.1.1
+    pullPolicy: IfNotPresent
+
+indexer:
+  name: indexer
+  replicas: 3
+
+  labels:
+    app: splunk
+    role: splunk_indexer
+    tier: indexer 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Default values for chart-splunk.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.

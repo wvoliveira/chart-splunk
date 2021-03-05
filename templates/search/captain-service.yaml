@@ -8,6 +8,7 @@ metadata:
     role: splunk_search_head_captain
     tier: search 
 spec:
+  type: NodePort
   selector:
     app: splunk
     role: splunk_search_head_captain
@@ -25,4 +26,3 @@ spec:
     - name: kv 
       port: 8191
       targetPort: 8191
-  clusterIP: None

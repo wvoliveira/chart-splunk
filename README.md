@@ -6,3 +6,8 @@ Based on [docker-splunk test_scenarios](https://github.com/splunk/docker-splunk)
 
 ## Get started
 
+Clone repository:
+
+```bash
+
+```

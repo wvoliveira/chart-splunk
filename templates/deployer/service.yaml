@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.deployer.name }}  
+  labels:
+    {{ toYaml .Values.deployer.labels | nindent 4 }}
+spec:
+  type: NodePort
+  selector:
+    {{ toYaml .Values.deployer.labels | nindent 4 }}
+  ports:
+    - name: splunkweb
+      port: {{ .Values.global.splunk.containerPorts.web }}
+      targetPort: {{ .Values.global.splunk.containerPorts.web }}
+    - name: splunkd
+      port: {{ .Values.global.splunk.containerPorts.mgmt }}
+      targetPort: {{ .Values.global.splunk.containerPorts.mgmt }}
+    - name: kv
+      port: {{ .Values.global.splunk.containerPorts.kv }}
+      targetPort: {{ .Values.global.splunk.containerPorts.kv }}

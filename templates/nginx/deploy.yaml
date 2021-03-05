@@ -1,29 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: splunk-defaults
+  name: {{ .Values.nginx.name }}
   labels:
-    app: splunk
-    role: splunk-defaults
-    tier: management
+    {{ toYaml .Values.nginx.labels | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      name: splunk-defaults
-  replicas: 1
+      name: {{ .Values.nginx.name }}
+  replicas: {{ .Values.nginx.replicas }}
   template:
     metadata:
       labels:
-        app: splunk
-        role: splunk-defaults
-        tier: management
-        name: splunk-defaults
+        {{ toYaml .Values.nginx.labels | nindent 8 }}
+        name: {{ .Values.nginx.name }}
     spec:
       containers:
-      - name: splunk-defaults
-        image: nginx
+      - name: {{ .Values.nginx.name }}
+        image: "{{ .Values.nginx.image.repository }}:{{ .Values.nginx.image.tag }}"
+        imagePullPolicy: {{ .Values.nginx.image.pullPolicy }}
         ports:
-        - containerPort: 80
+        - containerPort: {{ .Values.nginx.containerPort }}
         volumeMounts:
         - name: nginx-config
           mountPath: /etc/nginx/conf.d

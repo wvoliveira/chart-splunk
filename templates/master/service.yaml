@@ -2,15 +2,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: license-master
+  name: master
   labels:
     app: splunk
-    role: splunk_license_master
-    tier: management
+    role: splunk_cluster_master
+    tier: management 
 spec:
+  type: NodePort
   selector:
     app: splunk
-    role: splunk_license_master
+    role: splunk_cluster_master
     tier: management
   ports:
     - name: splunkweb
@@ -19,4 +20,3 @@ spec:
     - name: splunkd
       port: 8089
       targetPort: 8089
-  clusterIP: None
