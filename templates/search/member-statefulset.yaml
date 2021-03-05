@@ -1,25 +1,20 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: search
+  name: {{ .Values.search.member.name }}
+  namespace: {{ .Values.global.namespace }}
   labels:
-    app: splunk
-    role: splunk_search_head
-    tier: search
+    {{ toYaml .Values.search.member.labels | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      app: splunk
-      role: splunk_search_head
-      tier: search
-  replicas: 2 
-  serviceName: search 
+      {{ toYaml .Values.search.member.labels | nindent 6 }}
+  replicas: {{ .Values.search.member.replicas }}
+  serviceName: {{ .Values.search.member.name }} 
   template:
     metadata:
       labels:
-        app: splunk
-        role: splunk_search_head
-        tier: search 
+        {{ toYaml .Values.search.member.labels | nindent 8 }}
     spec:
       dnsPolicy: ClusterFirst 
       dnsConfig:
@@ -27,15 +22,16 @@ spec:
           - indexer.splunk.svc.cluster.local
           - search.splunk.svc.cluster.local 
       containers:
-        - name: search
-          image: splunk/splunk:8.1.1
+        - name: {{ .Values.search.member.name }}
+          image: "{{ .Values.global.splunk.image.repository }}:{{ .Values.global.splunk.image.tag }}"
+          imagePullPolicy: {{ .Values.global.splunk.image.pullPolicy }}
           env:
             - name: SPLUNK_HOME
               value: /opt/splunk
             - name: SPLUNK_DEFAULTS_URL
-              value: http://nginx/default.yml
+              value: http://{{ .Values.nginx.name }}/default.yml
             - name: SPLUNK_PASSWORD
-              value: helloworld
+              value: {{ .Values.global.splunk.password }}
             - name: SPLUNK_START_ARGS
               value: "--accept-license"
             - name: SPLUNK_ROLE
@@ -53,10 +49,10 @@ spec:
             - name: DEBUG
               value: "true"
           ports:
-            - containerPort: 8088
-            - containerPort: 8089
-            - containerPort: 8191 
-            - containerPort: 4001
+            - containerPort: {{ .Values.global.splunk.containerPorts.hec }}
+            - containerPort: {{ .Values.global.splunk.containerPorts.mgmt }}
+            - containerPort: {{ .Values.global.splunk.containerPorts.kv }} 
+            - containerPort: {{ .Values.global.splunk.containerPorts.replica }} 
           volumeMounts:
             - name: splunk-search-config
               mountPath: /opt/splunk/etc

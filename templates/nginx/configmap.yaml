@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: nginx-data-www
+  namespace: {{ .Values.global.namespace }}
 data:
 {{ (.Files.Glob "data/nginx/nginx-data-www/*").AsConfig | indent 2 }}
 ---

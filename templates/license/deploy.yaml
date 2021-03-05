@@ -2,45 +2,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: license-master
+  name: {{ .Values.license.name }}
+  namespace: {{ .Values.global.namespace }}
   labels:
-    app: splunk
-    role: splunk_license_master
-    tier: management
+    {{ toYaml .Values.license.labels | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.license.replicas }}
   selector:
     matchLabels:
-      app: splunk
-      role: splunk_license_master
-      tier: management
+      {{ toYaml .Values.license.labels | nindent 6 }}
   template:
     metadata:
       labels:
-        app: splunk
-        role: splunk_license_master
-        tier: management 
+        {{ toYaml .Values.license.labels | nindent 8 }}
     spec:
-      hostname: license-master
+      hostname: {{ .Values.license.name }}
       dnsPolicy: ClusterFirst
       dnsConfig:
         searches:
           - indexer.splunk.svc.cluster.local
           - search.splunk.svc.cluster.local
       containers:
-        - name: license-master
-          image: splunk/splunk:8.1.1
+        - name: {{ .Values.license.name }}
+          image: "{{ .Values.global.splunk.image.repository }}:{{ .Values.global.splunk.image.tag }}"
+          imagePullPolicy: {{ .Values.global.splunk.image.pullPolicy }}
           env:
             - name: SPLUNK_HOME
               value: /opt/splunk
             - name: SPLUNK_DEFAULTS_URL
-              value: http://nginx/default.yml
+              value: http://{{ .Values.nginx.name }}/default.yml
             - name: SPLUNK_ROLE
               value: splunk_license_master
             - name: SPLUNK_LICENSE_URI
-              value: http://nginx/mySplunkLicense.lic
+              value: http://{{ .Values.nginx.name }}/mySplunkLicense.lic
             - name: SPLUNK_PASSWORD
-              value: helloworld
+              value: {{ .Values.global.splunk.password }}
             - name: SPLUNK_START_ARGS
               value: "--accept-license"
             - name: SPLUNK_CLUSTER_MASTER_URL
@@ -57,9 +53,9 @@ spec:
               value: "true"
           ports:
             - name: web
-              containerPort: 8000
+              containerPort: {{ .Values.global.splunk.containerPorts.web }}
             - name: mgmt
-              containerPort: 8089
+              containerPort: {{ .Values.global.splunk.containerPorts.mgmt }}
           volumeMounts:
             - name: splunk-license-data
               mountPath: /opt/splunk/var

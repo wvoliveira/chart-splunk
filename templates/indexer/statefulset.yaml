@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ .Values.indexer.name }}
+  namespace: {{ .Values.global.namespace }}
   labels:
     {{ toYaml .Values.indexer.labels | nindent 4 }}
 spec:
@@ -22,7 +23,8 @@ spec:
           - search.splunk.svc.cluster.local
       containers:
         - name: {{ .Values.indexer.name }}
-          image: splunk/splunk:8.1.1
+          image: "{{ .Values.global.splunk.image.repository }}:{{ .Values.global.splunk.image.tag }}"
+          imagePullPolicy: {{ .Values.global.splunk.image.pullPolicy }}
           env:
             - name: SPLUNK_HOME
               value: /opt/splunk/
@@ -47,14 +49,9 @@ spec:
             - name: DEBUG
               value: "true"
           ports:
-            {{- range _, $value := .Values.global.splunk.containerPorts }}
+            {{- range $value := .Values.global.splunk.containerPorts }}
             - containerPort: {{ $value }}
             {{- end }}
-            - containerPort: 8000
-            - containerPort: 8088
-            - containerPort: 8089
-            - containerPort: 9997
-            - containerPort: 4001 
           volumeMounts:
             - name: splunk-idxcluster-config
               mountPath: /opt/splunk/etc
