@@ -24,6 +24,12 @@ Install and create namespace if not exists:
 helm install --create-namespace --namespace splunk splunk .
 ```
 
+Change to `splunk` namespace:
+
+```bash
+kubectl config set-context --current --namespace=splunk
+```
+
 Waiting for setup done:
 
 ```bash
@@ -33,5 +39,11 @@ kubectl logs -f svc/captain
 When finish, message will be like:
 
 ```txt
+Ansible playbook complete, will begin streaming splunkd_stderr.log
+```
+
+Now export the node port from minikube to access web UI:
+
+```bash
 
 ```

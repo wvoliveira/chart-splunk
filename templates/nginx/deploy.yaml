@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.nginx.name }}
-  namespace: {{ .Values.global.namespace }}
   labels:
     {{ toYaml .Values.nginx.labels | nindent 4 }}
 spec:

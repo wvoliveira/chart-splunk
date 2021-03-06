@@ -1,6 +1,4 @@
 global:
-  namespace: splunk
-
   splunk:
     password: helloworld
 

@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.search.captain.name }}
-  namespace: {{ .Values.global.namespace }}
   labels:
     {{ toYaml .Values.search.captain.labels | nindent 4 }}
 spec:

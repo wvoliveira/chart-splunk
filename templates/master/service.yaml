@@ -3,7 +3,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Values.master.name }}
-  namespace: {{ .Values.global.namespace }}
   labels:
     {{ toYaml .Values.master.labels | nindent 4 }}
 spec:
