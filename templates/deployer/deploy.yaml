@@ -32,8 +32,7 @@ spec:
               value: http://{{ .Values.nginx.name }}/default.yml
             - name: SPLUNK_ROLE
               value: splunk_deployer
-            - name: SPLUNK_SEARCH_HEAD_URL
-              value: search-0,search-1
+            
             - name: SPLUNK_DEPLOYER_URL
               value: deployer
             - name: SPLUNK_SEARCH_HEAD_CAPTAIN_URL

@@ -45,5 +45,7 @@ Ansible playbook complete, will begin streaming splunkd_stderr.log
 Now export the node port from minikube to access web UI:
 
 ```bash
-
+minikube service search -n splunk
 ```
+
+And that's it. Your cluster is ready!

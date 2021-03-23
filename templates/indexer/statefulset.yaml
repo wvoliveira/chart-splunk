@@ -39,8 +39,7 @@ spec:
               value: master
             - name: SPLUNK_INDEXER_URL
               value: indexer-0,indexer-1,indexer-2
-            - name: SPLUNK_SEARCH_HEAD_URL
-              value: search-0,search-1
+            
             - name: SPLUNK_DEPLOYER_URL
               value: deployer
             - name: SPLUNK_SEARCH_HEAD_CAPTAIN_URL
