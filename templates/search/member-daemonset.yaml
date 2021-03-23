@@ -1,6 +1,6 @@
-{{- if not .Values.global.splunk.daemonset.search -}}
+{{- if .Values.global.splunk.daemonset.search -}}
 apiVersion: apps/v1
-kind: StatefulSet
+kind: DaemonSet
 metadata:
   name: {{ .Values.search.member.name }}
   labels:
@@ -9,13 +9,19 @@ spec:
   selector:
     matchLabels:
       {{ toYaml .Values.search.member.labels | nindent 6 }}
-  replicas: {{ .Values.search.member.replicas }}
-  serviceName: {{ .Values.search.member.name }} 
   template:
     metadata:
       labels:
         {{ toYaml .Values.search.member.labels | nindent 8 }}
     spec:
+{{- if .Values.search.member.tolerations }}
+      tolerations:
+{{ toYaml .Values.search.member.tolerations | indent 8 }}
+{{- end }}
+{{- if .Values.search.member.affinity }}
+      affinity:
+{{ toYaml .Values.search.member.affinity | indent 8 }}
+{{- end }}
       dnsPolicy: ClusterFirst 
       dnsConfig:
         searches: 
@@ -40,13 +46,16 @@ spec:
               value: master
             - name: SPLUNK_INDEXER_URL
               value: indexer-0,indexer-1,indexer-2
-            
+            - name: SPLUNK_SEARCH_HEAD_URL
+              value: search,search,search
             - name: SPLUNK_DEPLOYER_URL
               value: deployer
             - name: SPLUNK_SEARCH_HEAD_CAPTAIN_URL
               value: captain
             - name: DEBUG
               value: "true"
+            - name: SPLUNK_LAUNCH_CONF
+              value: "OPTIMISTIC_ABOUT_FILE_LOCKING=1"
           ports:
             - containerPort: {{ .Values.global.splunk.containerPorts.hec }}
             - containerPort: {{ .Values.global.splunk.containerPorts.mgmt }}
@@ -59,7 +68,11 @@ spec:
               mountPath: /opt/splunk/var
       volumes:
         - name: splunk-search-config
-          emptyDir: {}
+          hostPath:
+            path: /opt/splunk/etc
+            type: DirectoryOrCreate
         - name: splunk-search-data
-          emptyDir: {}
+          hostPath:
+            path: /opt/splunk/var
+            type: DirectoryOrCreate
 {{- end }}

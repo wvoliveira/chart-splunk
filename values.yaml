@@ -15,6 +15,10 @@ global:
       tag: 8.1.1
       pullPolicy: IfNotPresent
 
+    daemonset:
+      indexer: true
+      search: true
+
 nginx:
   name: nginx
   replicas: 1
@@ -46,7 +50,9 @@ indexer:
   labels:
     app: splunk
     role: splunk_indexer
-    tier: indexer 
+    tier: indexer
+    splunk/indexer: "true"
+    kubernetes.io/role: "node"
 
 license:
   name: license
@@ -83,4 +89,18 @@ search:
     labels:
       app: splunk
       role: splunk_search_head
-      tier: search 
+      tier: search
+      splunk/search: "true"
+      kubernetes.io/role: "node"
+
+    affinity: # {}
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: "splunk/search"
+                operator: "Exists"
+
+    tolerations: # {}
+    - key: "splunk/search"
+      operator: "Exists"
