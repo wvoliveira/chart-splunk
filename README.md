@@ -1,5 +1,7 @@
 # chart-splunk
 
+[![Lint and Test Charts](https://github.com/wvoliveira/chart-splunk/actions/workflows/lint-test.yml/badge.svg?branch=main)](https://github.com/wvoliveira/chart-splunk/actions/workflows/lint-test.yml)
+
 Helm chart for Splunk Enterprise..
 
 Based on [docker-splunk test_scenarios](https://github.com/splunk/docker-splunk).
