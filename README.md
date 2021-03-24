@@ -21,7 +21,7 @@ cd chart-splunk
 Add your developer License in `mySplunkLicense.lic` file:
 
 ```bash
-cat `<license file path>` > data/nginx/nginx-data-www/mySplunkLicense.lic
+cat `license file path` > data/nginx/nginx-data-www/mySplunkLicense.lic
 ```
 
 Install and create namespace if not exists:
